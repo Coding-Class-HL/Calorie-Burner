@@ -1,0 +1,50 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+int main()
+{
+    int i, option, calories, cal;
+    string userName, readFile, name;
+
+    do {
+    cout << "Welcome! Please choose an option:\n";
+    cout << "1: Create new user\n";
+    cout << "2: Open existing user\n";
+    cout << "3: Exit\n";
+    cin >> option;
+        if(option == 1 || option == 2) {
+            break;
+        }
+    } while(option != 3);
+
+    ofstream ofile;
+    ofile.open("CalorieCalc.txt");
+
+    cout << "Enter user name: ";
+    cin >> userName;
+
+    for(i = 0; i < userName.size(); i++) {
+        userName[i] = toupper(userName[i]);
+    }
+
+    cout << "Enter calorie intake: ";
+    cin >> calories;
+
+    cout << "Writing data to files..." << endl;
+    ofile << userName << endl;
+    ofile << calories << endl;
+    ofile.close();
+
+    ifstream ifile;
+    ifile.open("CalorieCalc.txt");
+    cout << "Reading user data..." << endl;
+
+    ifile >> readFile;
+    cout << readFile << endl;
+
+    ifile.close();
+
+    return 0;
+}

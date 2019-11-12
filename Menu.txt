@@ -1,0 +1,6 @@
+-------------------Start Menu--------------------
+|        Welcome! Please choose an option:      |
+|               [C]reate new user               |
+|              [O]pen existing user             |
+|                    [E]xit                     |
+-------------------------------------------------

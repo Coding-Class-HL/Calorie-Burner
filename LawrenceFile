@@ -11,50 +11,43 @@ int main()
     char CHOICE[10];
     string line;
     while (CHOICE[0] != 'e') {
-        ifstream in ("Menu.txt");
-        while (getline(in, line))
-            cout << line << endl;
+        ifstream DATAFILE;
+        DATAFILE.open ("Menu.txt", ios::in);
+        cout << "\n\n";
+        while (getline(DATAFILE, line))
+            cout << line << "\n";
         cin >> CHOICE; 
         
         switch (CHOICE[0]) {
-            case 'c' : CHOICE[0] = 'e'; CreateUser(); break;
-            case 'o' : CHOICE[0] = 'e'; cout << "open user\n";/*FindUser()*/break;
-            case 'e' : cout << "\n\t<Exiting program, have a nice day!>"; break;
+            case 'c' : CreateUser(); break;
+            case 'v' : cout << "viewing existing user\n"; break;
+            case 'e' :cout << "editing existing user\n"; break;
+            case 's' :cout << "starting calculations\n"; break;
+            case 'q' : cout << "\n\t<Exiting program, have a nice day!>"; break;
             default : "\n\tInvalid Input!"; 
         }
     }
-    //code for next menu
-    //this one asks for how many 
     return 0;
 }
 
 void CreateUser() {
     int calories;
-    string userName, readFile;
+    string name, readFile;
     
-    ofstream ofile;
-    ofile.open("CalorieCalc.txt");
+    try {
+        ofstream DATAFILE;
+        DATAFILE.open("CalorieCalc.txt", ios:: out);
 
-    cout << "Enter username: ";
-    cin >> userName;
-
-    for (int i = 0; i < userName.size(); i++) 
-        userName[i] = toupper(userName[i]);
-            
-    cout << "Enter calorie intake: ";
-    cin >> calories;
-
-    cout << "Writing data to files..." << endl;
-    ofile << userName << endl;
-    ofile << calories << endl;
-    ofile.close();
-
-    ifstream ifile;
-    ifile.open("CalorieCalc.txt");
-    cout << "Reading user data..." << endl;
-
-    ifile >> readFile;
-    cout << readFile << endl;
-
-    ifile.close();
+        cout << "\n\tUsername: ";
+        cin.ignore();
+        getline(cin, name);
+        cout << "\n\tCalories I wish to burn off: ";
+        cin >> calories;
+        
+        DATAFILE << name << "\n";
+        DATAFILE << calories << "\n";
+        DATAFILE.close();
+        cout << "\n\tSuccessfully saved information.";
+    } catch (exception X)
+    { cout << "\n\tFILE ERROR! COULD NOT CREATE NEW USER.";}
 }

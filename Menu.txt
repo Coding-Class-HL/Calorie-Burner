@@ -1,6 +1,8 @@
--------------------Start Menu--------------------
-|        Welcome! Please choose an option:      |
-|               [C]reate new user               |
-|              [O]pen existing user             |
-|                    [E]xit                     |
+--------------------Main Menu--------------------
+|            CALORIE COUNTER INITIATED          |     
+|               [C]reate New user               |
+|              [V]iew Existing User             |
+|              [E]dit Existing User             |
+|              [S]tart Calculations             |
+|                    [Q]uit                     |
 -------------------------------------------------

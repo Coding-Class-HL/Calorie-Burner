@@ -1,0 +1,289 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iomanip>
+#include <cmath>
+
+using namespace std;
+
+const int W = 25;
+const double AQMET = 7.0;
+const double BOXMET = 5.5;
+const double BIKEMET1 = 6.0;
+const double BIKEMET2 = 4.5;
+const double JOGMET = 5.0;
+const double PILMET = 9.0;
+const double RUNMET = 3.0;
+const double ROWMET = 4.8;
+const double STRMET = 8.5;
+const double SWMMET = 5.8;
+const double WLKMET = 6.2;
+const double YGAMET = 10.2;
+const double ZMBMET = 5.4;
+
+void CreateUser();
+void ViewExistUser();
+void EditExistUser();
+void StartCalc();
+double WorkFormula(double, double);
+
+int main()
+{
+    char CHOICE[10];
+    string line;
+    while (CHOICE[0] != 'q') {
+        ifstream DATAFILE;
+        DATAFILE.open ("Menu.txt", ios::in);
+        cout << "\n\n";
+        while (getline(DATAFILE, line))
+            cout << line << "\n";
+            cout << "Please select an option: ";
+        cin >> CHOICE;
+        CHOICE[0] = tolower(CHOICE[0]);
+
+        switch (CHOICE[0]) {
+            case 'c' : cout << "\n\t--- Creating New User ---\n"; CreateUser(); break;
+            case 'v' : cout << "\n\t--- Viewing Existing User ---\n"; ViewExistUser(); break;
+            case 'e' : cout << "\n\t--- Editing Existing User ---\n"; EditExistUser(); break;
+            case 's' : cout << "\n\t--- Starting Calculations ---\n"; StartCalc(); break;
+            case 'q' : cout << "\n\t*** <Exiting program, have a nice day!> ***\n"; break;
+            default : "\n\tInvalid Input!";
+        }
+    }
+
+    return 0;
+}
+
+void CreateUser() {
+    char option;
+    string userName, userNameFile;
+    double weight, calories;
+
+    while (option != 'y') {
+    cout << "\n\t> Please enter your first name: ";
+    cin.ignore();
+    cin >> userName;
+    for(int i = 0; i < userName.size(); i++) {
+        userName[i] = toupper(userName[i]);
+    }
+    cout << "\n\t> Enter your current weight(lbs): ";
+    cin >> weight;
+
+    cout << "\n\t> Enter calories to burn: ";
+    cin >> calories;
+
+    cout << "\n\t***New user " << userName << " created.\n";
+    cout << "\n\t> Weight: " << weight << endl;
+    cout << "\n\t> Current Calories: " << calories << endl;
+    cout << "\n\t***Information correct (Y/N)? ";
+    cin >> option;
+    }
+
+    userNameFile = userName + ".txt";
+    ofstream ofile;
+    ofile.open(userNameFile);
+
+    ofile << userName << endl;
+    ofile << weight << endl;
+    ofile << calories << endl;
+
+    ofile.close();
+}
+
+void ViewExistUser() {
+    double weightKG, numCalories, sum;
+    char option;
+    string userName, userNameFile, readFile, weight, calories;
+
+    cout << "\n\t> Enter user name: ";
+    cin.ignore();
+    cin >> userName;
+    for(int i = 0; i < userName.size(); i++) {
+        userName[i] = toupper(userName[i]);
+    }
+    userNameFile = userName + ".txt";
+
+    ifstream ifile;
+    ifile.open(userNameFile);
+
+    if(ifile.fail()) {
+        cout << "\n\t***ERROR: user " << userName << " does not exist***";
+        return;
+    }
+        ifile >> readFile;
+        userName = readFile;
+
+        ifile >> readFile;
+        weight = readFile;
+
+        ifile >> readFile;
+        calories = readFile;
+
+    ifile.close();
+
+    cout << left << setw(15) << "\n\t> USER: " << setw(5) << userName;
+    cout << setw(15) << "\n\t> WEIGHT: " << setw(5) << weight;
+    cout << setw(15) << "\n\t> CALORIES: " << setw(5) << calories;
+}
+
+void EditExistUser() {
+    double weightKG, numCalories, sum, caloriesAdd;
+    char option, optionCalories;
+    string userName, userNameFile, readFile, weight, calories;
+
+    while (option != 'y') {
+    cout << "\n\t> Enter user name: ";
+    cin.ignore();
+    cin >> userName;
+        for(int i = 0; i < userName.size(); i++) {
+            userName[i] = toupper(userName[i]);
+        }
+    cout << "\n\t> User " << userName << " correct (Y/N)? ";
+    cin >> option;
+    option = tolower(option);
+    }
+
+    userNameFile = userName + ".txt";
+
+    ifstream ifile;
+    ifile.open(userNameFile);
+
+    if(ifile.fail()) {
+    cout << "\n\t***ERROR: user " << userName << " does not exist***";
+    return;
+    }
+        ifile >> readFile;
+        userName = readFile;
+
+        ifile >> readFile;
+        weight = readFile;
+
+        ifile >> readFile;
+        calories = readFile;
+
+    ifile.close();
+
+    weightKG = stod(weight);
+    numCalories = stod(calories);
+
+    cout << left << setw(15) << "\n\t> USER: " << setw(5) << userName;
+    cout << setw(15) << "\n\t> WEIGHT: " << setw(5) << weight;
+    cout << setw(15) << "\n\t> CALORIES: " << setw(5) << calories;
+    cout << "\n\t> Please choose an option to edit: \n";
+    cout << "\n\t[W]eight | [C]alories | [Q]uit\n";
+    cout << "\n\t> ";
+    cin >> option;
+    option = tolower(option);
+
+    switch(option) {
+    case 'w': cout << "\n\t> Current weight: " << weightKG;
+              cout << "\n\t> Please enter new weight (lbs): ";
+              cin >> weightKG;
+              cout << "\n\t> New weight for " << userName << ": " << weightKG;
+              break;
+
+    case 'c': cout << "\n\t> Add to current calories or set new?";
+              cout << "\n\t> Current Calories: " << calories;
+              cout << "\n\t> [A]dd | [S]et New";
+              cout << "\n\t> ";
+              cin >> optionCalories;
+              optionCalories = tolower(optionCalories);
+              if(optionCalories == 'a') {
+                cout << "\n\t> Enter amount to add: ";
+                cin >> caloriesAdd;
+                numCalories = caloriesAdd + numCalories;
+                cout << "\n\t> New Calorie count: " << numCalories;
+              }
+              else if(optionCalories == 's') {
+                cout << "\n\t Enter new calorie amount: ";
+                cin >> numCalories;
+              }
+              break;
+
+    case 'q': cout << "\n\t> No adjustments made.";
+              break;
+
+    default:  cout << "\n\t> No adjustments made.";
+              break;
+    }
+    ofstream ofile;
+    ofile.open(userNameFile);
+
+    ofile << userName << endl;
+    ofile << weightKG << endl;
+    ofile << numCalories << endl;
+
+    ofile.close();
+}
+
+void StartCalc() {
+    double weightKG, numCalories, sum;
+    char option;
+    string userName, userNameFile, readFile, weight, calories;
+
+    cout << "\n\tUse existing user data (Y/N)? ";
+    cin >> option;
+    option = toupper(option);
+
+    do {
+            cout << "\n\tEnter user name: ";
+            cin >> userName;
+            userNameFile = userName + ".txt";
+
+            ifstream ifile;
+            ifile.open(userNameFile);
+
+            ifile >> readFile;
+            userName = readFile;
+
+            ifile >> readFile;
+            weight = readFile;
+
+            ifile >> readFile;
+            calories = readFile;
+
+            ifile.close();
+
+            cout << "\n\t> USER: " << userName << endl;
+            cout << "\n\t> WEIGHT: " << weight << endl;
+            cout << "\n\t> CALORIES: " << calories << endl;
+
+            cout << "\n\t> CORRECT? ";
+            cin >> option;
+            option = toupper(option);
+            if (option == 'N') {
+                cout << "\n\tUse existing user data (Y/N)? ";
+            }
+                break;
+        } while (option != 'Y');
+
+    //formula
+    weightKG = stod(weight) * .4535;
+    numCalories = stod(calories);
+
+    sum = WorkFormula(weightKG, numCalories);
+
+    cout << "\n\t\t---APPROXIMATE MINUTES to BURN " << numCalories << " CALORIES---\n";
+    cout << left << setw(W) << "\nEXERCISES" << setw(W) << "MINS\n" << endl;
+    cout << left << setw(W) << "Aqua aerobics" << setw(W) << ceil(sum * AQMET) << endl;
+    cout << setw(W) << "Boxing - Heavy Bag" << setw(W) << ceil(sum * BOXMET) << endl;
+    cout << setw(W) << "Cycling - Outdoor" << setw(W) << ceil(sum * BIKEMET1) << endl;
+    cout << setw(W) << "Cycling - Spin Class" << setw(W) << ceil(sum * BIKEMET2) << endl;
+    cout << setw(W) << "Jog (@ 5 mi/hr)" << setw(W) << ceil(sum * JOGMET) << endl;
+    cout << setw(W) << "Pilates" << setw(W) << ceil(sum * PILMET) << endl;
+    cout << setw(W) << "Rowing" << setw(W) << ceil(sum * ROWMET) << endl;
+    cout << setw(W) << "Run (@ 6.5 mi/hr)" << setw(W) << ceil(sum * RUNMET) << endl;
+    cout << setw(W) << "Rowing" << setw(W) << ceil(sum * ROWMET) << endl;
+    cout << setw(W) << "Strength Training" << setw(W) << ceil(sum * STRMET) << endl;
+    cout << setw(W) << "Swimming Laps" << setw(W) << ceil(sum * SWMMET) << endl;
+    cout << setw(W) << "Walking (@ 3.5 mi/hr)" << setw(W) << ceil(sum * WLKMET) << endl;
+    cout << setw(W) << "Yoga" << setw(W) << ceil(sum * YGAMET) << endl;
+    cout << setw(W) << "Zumba" << setw(W) << ceil(sum * ZMBMET) << endl;
+
+}
+
+double WorkFormula (double weight, double cal) {
+    double result;
+    result = cal / weight;
+    return result;
+}
